@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import ClearIcon from '@mui/icons-material/Clear';
 import { TextField, InputAdornment, Typography, Stack } from '@mui/material';
 
 // youtube
@@ -52,14 +53,15 @@ export default function ToggleColorMode() {
 function App() {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
+  const [input, setInput] = useState('');
   const [youtubeId, setYoutubeId] = useState('');
   const [opts, setOpts] = useState({ height: '360', width: '720' });
   const [buffer, setBuffer] = useState({ width: 0, height: 0 })
-  
+
   useEffect(() => {
     // update player size
     function updateSize() {
-      setOpts({ height: Math.floor((.6 * window.innerHeight) - buffer.height).toString(), width: ((window.innerWidth) - buffer.width).toString() });
+      setOpts({ height: Math.floor((.5 * window.innerHeight) - buffer.height).toString(), width: ((window.innerWidth) - buffer.width).toString() });
     }
     updateSize();
     window.addEventListener('resize', updateSize);
@@ -74,7 +76,7 @@ function App() {
       setYoutubeId(id);
     }
   }
-  
+
   return (
     <>
       <CssBaseline />
@@ -103,7 +105,7 @@ function App() {
         >
           <Paper
             sx={{
-              bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+              bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
               padding: 1,
               width: '100%',
             }}
@@ -114,7 +116,8 @@ function App() {
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
               <TextField
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { youtubeLink(e) }}
+                value={input}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { youtubeLink(e); setInput(e.target.value) }}
                 id="input-with-icon-textfield"
                 placeholder='Enter youtube link'
                 InputProps={{
@@ -123,35 +126,120 @@ function App() {
                       <YouTubeIcon />
                     </InputAdornment>
                   ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton sx={{ ml: 1 }} color="inherit" onClick={() => { setYoutubeId(''); setInput(''); }}>
+                        <ClearIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  )
                 }}
                 variant="standard"
               />
             </Stack>
           </Paper>
         </Grid>
-        <Grid
-          xs={12}
-          item
-          className="player"
-          sx={{
-            height: '60vh',
-          }}
-        >
-          <Box
+        {
+          youtubeId.length > 0 &&
+          <Grid
+            xs={12}
+            item
+            className="player"
             sx={{
-              display: 'flex',
-              width: '100%',
-              height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
+              height: '50vh',
             }}
           >
-            <YouTube
-              videoId={youtubeId}
-              opts={opts}
-            />
-          </Box>
-        </Grid>
+            <Box
+              sx={{
+                display: 'flex',
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <YouTube
+                videoId={youtubeId}
+                opts={opts}
+              />
+            </Box>
+          </Grid>
+        }
+        {youtubeId.length > 0 &&
+          <>
+            <Grid
+              xs={12}
+              item
+              className="scoreboard"
+              sx={{
+                height: '40vh',
+              }}
+            >
+              <Stack spacing={1} direction="row" justifyContent="center" alignItems="center" height="100%">
+                <Box
+                  sx={{
+                    display: 'flex',
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Paper
+                    sx={{
+                      bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
+                      padding: 1,
+                      width: '100%',
+                      height: '100%'
+                    }}
+                  >
+                    <Typography>
+                      John Doe
+                    </Typography>
+                  </Paper>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Paper
+                    sx={{
+                      bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
+                      padding: 1,
+                      width: '100%',
+                      height: '100%'
+                    }}
+                  >
+                  </Paper>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Paper
+                    sx={{
+                      bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
+                      padding: 1,
+                      width: '100%',
+                      height: '100%'
+                    }}
+                  >
+                  </Paper>
+                </Box>
+              </Stack>
+            </Grid>
+          </>
+        }
       </Grid>
     </>
   );
