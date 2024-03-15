@@ -11,17 +11,12 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { Typography, Stack } from '@mui/material';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import { TextField, InputAdornment, Typography, Stack } from '@mui/material';
 
 // youtube
 import YouTube from 'react-youtube';
 
-
-// const darkTheme = createTheme({
-//   palette: {
-//     mode: 'dark',
-//   },
-// });
 const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
 export default function ToggleColorMode() {
@@ -57,8 +52,10 @@ export default function ToggleColorMode() {
 function App() {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
+  const [youtubeId, setYoutubeId] = useState('');
   const [opts, setOpts] = useState({ height: '360', width: '720' });
   const [buffer, setBuffer] = useState({ width: 0, height: 0 })
+  
   useEffect(() => {
     // update player size
     function updateSize() {
@@ -68,6 +65,16 @@ function App() {
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
+
+  // extract youtube id from link
+  function youtubeLink(e: React.ChangeEvent<HTMLInputElement>) {
+    let url = e.target.value;
+    let id = url.split('v=')[1];
+    if (id) {
+      setYoutubeId(id);
+    }
+  }
+  
   return (
     <>
       <CssBaseline />
@@ -103,12 +110,23 @@ function App() {
           >
             <Stack direction="row" justifyContent="center" alignItems="center">
               <Typography>Learn the rules</Typography>
-              
               <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
+              <TextField
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { youtubeLink(e) }}
+                id="input-with-icon-textfield"
+                placeholder='Enter youtube link'
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <YouTubeIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
             </Stack>
-
           </Paper>
         </Grid>
         <Grid
@@ -129,27 +147,13 @@ function App() {
             }}
           >
             <YouTube
-              videoId="6ZfuNTqbHE8"
+              videoId={youtubeId}
               opts={opts}
             />
           </Box>
         </Grid>
       </Grid>
     </>
-    // <Box
-    //   sx={{
-    //     display: 'flex',
-    //     width: '100vw',
-    //     height: '100vh',
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //     bgcolor: 'background.default',
-    //     color: 'text.primary',
-    //     borderRadius: 1,
-    //   }}
-    // >
-
-    // </Box>
   );
 }
 
