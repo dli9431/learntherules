@@ -82,8 +82,8 @@ function App() {
   const [currTime, setCurrTime] = useState<number>(0);
   const [playState, setPlayState] = useState<number>(0);
   const [player, setPlayer] = useState<any>(null);
-  const [fighter1, setFighter1] = useState<Fighter>({ name: '' });
-  const [fighter2, setFighter2] = useState<Fighter>({ name: '' });
+  const [fighter1, setFighter1] = useState<Fighter>({ name: 'Player 1' });
+  const [fighter2, setFighter2] = useState<Fighter>({ name: 'Player 2' });
 
   useEffect(() => {
     // update player size
