@@ -11,7 +11,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import ClearIcon from '@mui/icons-material/Clear';
-import { Card, CardContent, CardMedia, TextField, InputAdornment, Typography, Stack } from '@mui/material';
+import { TextField, InputAdornment, Typography, Stack } from '@mui/material';
 
 // youtube
 import YouTube from 'react-youtube';
@@ -20,6 +20,8 @@ import YouTube from 'react-youtube';
 import { parseTitle } from './parse.tsx';
 import client from './../env/secrets.ts';
 import Timer from './timer.tsx';
+import { Fighter, PlayerOptions } from './interfaces/shared.ts';
+import Player from './player.tsx';
 
 const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
@@ -51,19 +53,6 @@ export default function ToggleColorMode() {
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
-}
-
-interface PlayerOptions {
-  height: string;
-  width: string;
-  playerVars: {
-    mute: number;
-    autoplay: number;
-  };
-}
-
-interface Fighter {
-  name: string;
 }
 
 function App() {
@@ -147,16 +136,6 @@ function App() {
           color: 'text.primary',
         }}
       >
-        {/* <Grid
-          xs={12}
-          item
-          className='title'
-          p={1}
-        >
-          <Box>
-            <Typography>Test</Typography>
-          </Box>
-        </Grid> */}
         <Grid
           xs={12}
           item
@@ -238,102 +217,9 @@ function App() {
               }}
             >
               <Stack spacing={1} direction={{ xs: 'column', sm: 'row' }} justifyContent='center' alignItems='center' height='100%'>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Paper
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
-                      padding: 1,
-                      width: '100%',
-                      height: '100%'
-                    }}
-                  >
-                    <Typography variant="h3">
-                      {fighter1.name}
-                    </Typography>
-                  </Paper>
-                </Box>
-                <Box
-                  className='timer'
-                  sx={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '100%',
-                  }}
-                >
-                  <Card sx={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <CardContent sx={{ flex: '1 0 auto', width: '100%', padding: 0 }}>
-                        <Typography component='div' variant='h1'>
-                          <Timer currTime={currTime} />
-                        </Typography>
-                      </CardContent>
-                      {/* <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                        test
-                      </Box> */}
-                    </Box>
-                    {/* <CardMedia
-                      component='img'
-                      sx={{ width: 151 }}
-                      image='/static/images/cards/live-from-space.jpg'
-                      alt='Live from space album cover'
-                    /> */}
-                  </Card>
-                  {/* <Card
-                    elevation={3}
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
-                      padding: 1,
-                      width: '100%',
-                      height: '100%'
-                    }}
-                  >
-                    <Typography variant='h1'>
-                      5:00
-                    </Typography>
-                  </Paper> */}
-                </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Paper
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
-                      padding: 1,
-                      width: '100%',
-                      height: '100%'
-                    }}
-                  >
-                    <Typography variant="h3">
-                      {fighter2.name}
-                    </Typography>
-                  </Paper>
-                </Box>
+                <Player fighter={fighter1} theme={theme} />
+                <Timer currTime={currTime} />
+                <Player fighter={fighter2} theme={theme} />
               </Stack>
             </Grid>
           </>
