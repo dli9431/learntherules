@@ -1,8 +1,10 @@
-import { Box, Paper, Typography } from '@mui/material';
+import { Button, Stack, Box, Paper, Typography, Grid } from '@mui/material';
 import { Fighter } from './interfaces/shared.ts';
 import { Theme } from '@mui/material/styles';
+import Score from './score.tsx';
+import { ScoreDial } from './score.tsx';
 
-export const Player = ({ fighter, theme }: {fighter: Fighter; theme: Theme}) => {
+export const Player = ({ fighter, theme }: { fighter: Fighter; theme: Theme }) => {
     return (
         <Box
             sx={{
@@ -23,9 +25,44 @@ export const Player = ({ fighter, theme }: {fighter: Fighter; theme: Theme}) => 
                     height: '100%'
                 }}
             >
-                <Typography variant="h3">
-                    {fighter.name}
-                </Typography>
+                <Stack spacing={0} alignItems="center" direction={{ xs: 'row', sm: 'column' }}>
+                    <Typography fontSize={{ md: 30, xs: 15 }}>
+                        {fighter.name}
+                    </Typography>
+                    <Grid
+                        direction="row"
+                        container
+                        sx={{ border: '1px solid black' }}
+                    >
+                        <Grid item>
+                            <ScoreDial action="add" position={fighter.position} />
+                        </Grid>
+                        <Grid item>
+                            <ScoreDial action="remove" position={fighter.position} />
+                        </Grid>
+                    </Grid>
+                    {/* <Grid
+                        direction="row"
+                        container
+                        sx={{ border: '1px solid black' }}
+                    >
+                        <Grid item>
+                            <Score variant="outlined" color="error" value="-p" />
+                        </Grid>
+                        <Grid item>
+                            <Score variant="outlined" color="success" value="-2" />
+                        </Grid>
+                        <Grid item>
+                            <Score variant="outlined" color="success" value="-3" />
+                        </Grid>
+                        <Grid item>
+                            <Score variant="outlined" color="success" value="-4" />
+                        </Grid>
+                        <Grid item>
+                            <Score variant="outlined" color="info" value="-a" />
+                        </Grid>
+                    </Grid> */}
+                </Stack>
             </Paper>
         </Box>
     )

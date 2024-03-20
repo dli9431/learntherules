@@ -17,8 +17,8 @@ import { TextField, InputAdornment, Typography, Stack } from '@mui/material';
 import YouTube from 'react-youtube';
 
 // app imports
-import { parseTitle } from './parse.tsx';
 import client from './../env/secrets.ts';
+import { parseTitle } from './parse.tsx';
 import Timer from './timer.tsx';
 import { Fighter, PlayerOptions } from './interfaces/shared.ts';
 import Player from './player.tsx';
@@ -59,7 +59,7 @@ function App() {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   const [input, setInput] = useState<string>('');
-  const [youtubeId, setYoutubeId] = useState<string>('');
+  const [youtubeId, setYoutubeId] = useState<string>('UZ3m4ay8Jrk'); // for testing
   const [opts, setOpts] = useState<PlayerOptions>({
     height: '360', width: '720',
     playerVars: {
@@ -71,8 +71,8 @@ function App() {
   const [currTime, setCurrTime] = useState<number>(0);
   const [playState, setPlayState] = useState<number>(0);
   const [player, setPlayer] = useState<any>(null);
-  const [fighter1, setFighter1] = useState<Fighter>({ name: 'Player 1' });
-  const [fighter2, setFighter2] = useState<Fighter>({ name: 'Player 2' });
+  const [fighter1, setFighter1] = useState<Fighter>({ name: 'Player 1', position: 1 });
+  const [fighter2, setFighter2] = useState<Fighter>({ name: 'Player 2', position: 2 });
 
   useEffect(() => {
     // update player size
@@ -118,8 +118,8 @@ function App() {
     // parse video title
     const names = parseTitle(event.target.videoTitle);
     if (names) {
-      setFighter1({ name: names.firstPerson });
-      setFighter2({ name: names.secondPerson });
+      setFighter1({ name: names.firstPerson, position: 1 });
+      setFighter2({ name: names.secondPerson, position: 2 });
     }
   };
   const onStateChange = (event: { target: any; }) => {

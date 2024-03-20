@@ -1,5 +1,6 @@
 export interface Fighter {
     name: string;
+    position: number
 }
 
 export interface PlayerOptions {

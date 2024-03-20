@@ -21,15 +21,9 @@ export function Timer({ currTime }: { currTime: number }) {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <CardContent sx={{ flex: '1 0 auto', width: '100%', padding: 0 }}>
-            <Typography component='div' variant='h1'>
-              <div>
-                {minutes}:{remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds}
-              </div>
-            </Typography>
-          </CardContent>
-        </Box>
+        <Typography component='div' fontSize={{ md: 120, sm: 60, xs: 30 }}>
+          {minutes}:{remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds}
+        </Typography>
       </Card>
     </Box>
   );
