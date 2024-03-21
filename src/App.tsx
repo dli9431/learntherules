@@ -3,6 +3,7 @@ import { useMemo, createContext, useState, useContext, useEffect } from 'react'
 // mui
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+// import Grid from '@mui/material/Unstable_Grid2';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
@@ -77,7 +78,18 @@ function App() {
   useEffect(() => {
     // update player size
     function updateSize() {
-      setOpts(prev => ({ ...prev, height: Math.floor(.5 * window.innerHeight).toString(), width: (window.innerWidth).toString() }));
+      const breakpoints = theme.breakpoints.values;
+      let videoSize = { width: 1, height: 1 };
+      if (window.innerWidth < breakpoints.sm) {
+        videoSize = { width: 1, height: 0.5 };
+      }
+      if (window.innerWidth >= breakpoints.sm && window.innerWidth < breakpoints.lg) {
+        videoSize = { width: .5, height: 1 };
+      }
+      if (window.innerWidth >= breakpoints.lg) {
+        videoSize = { width: 1, height: .5 };
+      }
+      setOpts(prev => ({ ...prev, height: Math.floor(videoSize.height * window.innerHeight).toString(), width: (videoSize.width * window.innerWidth).toString() }));
     }
     updateSize();
     window.addEventListener('resize', updateSize);
@@ -129,100 +141,87 @@ function App() {
   return (
     <>
       <CssBaseline />
+      <Paper
+        sx={{
+          bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
+          padding: { xs: 0, sm: 1 },
+          width: '100%',
+        }}
+      >
+        <Stack direction='row' justifyContent='center' alignItems='center'>
+          <Typography display={{ xs: 'none', sm: 'block' }}>Learn the rules</Typography>
+          <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color='inherit'>
+            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+          <TextField
+            value={input}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { youtubeLink(e); setInput(e.target.value) }}
+            id='input-with-icon-textfield'
+            placeholder='Enter youtube link'
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <YouTubeIcon />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <IconButton sx={{ ml: 1 }} color='inherit' onClick={() => { setYoutubeId(''); setInput(''); }}>
+                    <ClearIcon />
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+            variant='standard'
+          />
+        </Stack>
+      </Paper>
       <Grid
+        spacing={0}
+        direction={{ xs: 'column', sm: 'row', md: 'row', lg: 'column' }}
         container
         sx={{
+          flexGrow: 1,
           bgcolor: 'background.default',
           color: 'text.primary',
         }}
       >
-        <Grid
-          xs={12}
-          item
-          className='controls'
-          p={1}
-        >
-          <Paper
-            sx={{
-              bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
-              padding: 1,
-              width: '100%',
-            }}
-          >
-            <Stack direction='row' justifyContent='center' alignItems='center'>
-              <Typography>Learn the rules</Typography>
-              <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color='inherit'>
-                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-              </IconButton>
-              <TextField
-                value={input}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { youtubeLink(e); setInput(e.target.value) }}
-                id='input-with-icon-textfield'
-                placeholder='Enter youtube link'
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <YouTubeIcon />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton sx={{ ml: 1 }} color='inherit' onClick={() => { setYoutubeId(''); setInput(''); }}>
-                        <ClearIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-                variant='standard'
-              />
-            </Stack>
-          </Paper>
-        </Grid>
         {
           youtubeId.length > 0 &&
           <Grid
-            xs={12}
             item
+            xs={12} sm={6} md={6} lg={12}
             className='player'
-            sx={{
-              height: '50vh',
-            }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                width: '100%',
-                height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <YouTube
-                videoId={youtubeId}
-                opts={opts}
-                onReady={onReady}
-                onStateChange={onStateChange}
-              />
-            </Box>
+            <YouTube
+              // key={opts.width + opts.height} // forces rerender when window size changes
+              videoId={youtubeId}
+              opts={opts}
+              onReady={onReady}
+              onStateChange={onStateChange}
+            />
           </Grid>
         }
         {youtubeId.length > 0 &&
-          <>
-            <Grid
-              xs={12}
-              item
-              className='scoreboard'
-              sx={{
-                height: '40vh',
-              }}
-            >
-              <Stack spacing={1} direction={{ xs: 'column', sm: 'row' }} justifyContent='center' alignItems='center' height='100%'>
-                <Player fighter={fighter1} theme={theme} />
+          <Grid
+            item
+            className='scoreboard'
+            xs={12} sm={6} md={6} lg={12}
+            display={{ xs: 'none', sm: 'inline' }}
+            flexGrow={1}
+          >
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={12} lg={4} order={{ sm: 1, lg: 2 }} sx={{ textAlign: 'center' }}>
                 <Timer currTime={currTime} />
+              </Grid>
+              <Grid item xs={6} sm={6} lg={4} order={{ sm: 2, lg: 1 }}>
+                <Player fighter={fighter1} theme={theme} />
+              </Grid>
+              <Grid item xs={6} sm={6} lg={4} order={{ sm: 3, lg: 3 }}>
                 <Player fighter={fighter2} theme={theme} />
-              </Stack>
+              </Grid>
             </Grid>
-          </>
+          </Grid>
         }
       </Grid>
     </>

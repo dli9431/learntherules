@@ -25,12 +25,12 @@ export const Player = ({ fighter, theme }: { fighter: Fighter; theme: Theme }) =
                     height: '100%'
                 }}
             >
-                <Stack spacing={0} alignItems="center" direction={{ xs: 'row', sm: 'column' }}>
+                <Stack spacing={0} alignItems="center" /*direction={{ sm: 'column', lg: 'row' }}*/>
                     <Typography fontSize={{ md: 30, xs: 15 }}>
                         {fighter.name}
                     </Typography>
                     <Grid
-                        direction="row"
+                        direction={{ sm: 'row' }}
                         container
                         sx={{ border: '1px solid black' }}
                     >
