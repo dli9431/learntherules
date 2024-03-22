@@ -6,14 +6,16 @@ import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-export default function ScorePopover({ action, setFighter }: { action: 'add' | 'remove'; setFighter: any }) {
+export default function ScorePopover({ action, setFighter, playerControl }: { action: 'add' | 'remove'; setFighter: any; playerControl: any }) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        playerControl('pause');
         setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
+        playerControl('play');
         setAnchorEl(null);
     };
 
