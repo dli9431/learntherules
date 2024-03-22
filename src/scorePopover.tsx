@@ -6,7 +6,7 @@ import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-export default function ScorePopover({ action }: { action: 'add' | 'remove' }) {
+export default function ScorePopover({ action, setFighter }: { action: 'add' | 'remove'; setFighter: any }) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -16,6 +16,26 @@ export default function ScorePopover({ action }: { action: 'add' | 'remove' }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const addPoints = (points: number, type: string) => {
+        setFighter((prev: any) => {
+            switch (type) {
+                case 'pts':
+                    return { ...prev, points: prev.points + points };
+                    break;
+                case 'adv':
+                    return { ...prev, advantages: prev.advantages + points };
+                    break;
+                case 'pen':
+                    return { ...prev, penalties: prev.penalties + points };
+                    break;
+                default:
+                    return prev;
+                    break;
+            }
+        });
+        handleClose();
+    }
 
     const open = Boolean(anchorEl);
     const id = open ? action : undefined;
@@ -36,10 +56,21 @@ export default function ScorePopover({ action }: { action: 'add' | 'remove' }) {
                 }}
             >
                 <Stack direction="column" spacing={1}>
-                    <Button color={action === 'remove' ? 'error' : 'success'} variant="contained">{action === 'add' ? '+' : '-'}2 points</Button>
-                    <Button color={action === 'remove' ? 'error' : 'success'} variant="contained">{action === 'add' ? '+' : '-'}3 points</Button>
-                    <Button color={action === 'remove' ? 'error' : 'success'} variant="contained">{action === 'add' ? '+' : '-'}4 points</Button>
-                    <Button color={action === 'remove' ? 'error' : 'success'} variant="contained">{action === 'add' ? '-' : '+'}Penalty</Button>
+                    <Button
+                        onClick={() => action === 'add' ? addPoints(2, 'pts') : addPoints(-2, 'pts')}
+                        color={action === 'add' ? 'success' : 'error'} variant="contained">{action === 'add' ? '+' : '-'}2 points</Button>
+                    <Button
+                        onClick={() => action === 'add' ? addPoints(3, 'pts') : addPoints(-3, 'pts')}
+                        color={action === 'add' ? 'success' : 'error'} variant="contained">{action === 'add' ? '+' : '-'}3 points</Button>
+                    <Button
+                        onClick={() => action === 'add' ? addPoints(4, 'pts') : addPoints(-4, 'pts')}
+                        color={action === 'add' ? 'success' : 'error'} variant="contained">{action === 'add' ? '+' : '-'}4 points</Button>
+                    <Button
+                        onClick={() => action === 'add' ? addPoints(1, 'adv') : addPoints(-1, 'adv')}
+                        color={action === 'add' ? 'success' : 'error'} variant="contained">{action === 'add' ? '+' : '-'}Advantage</Button>
+                    <Button
+                        onClick={() => action === 'remove' ? addPoints(1, 'pen') : addPoints(-1, 'pen')}
+                        color={action === 'add' ? 'success' : 'error'} variant="contained">{action === 'add' ? '-' : '+'}Penalty</Button>
                 </Stack>
             </Popover>
         </div>

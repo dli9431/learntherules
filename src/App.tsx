@@ -223,10 +223,10 @@ function App() {
                 <Timer currTime={currTime} />
               </Grid>
               <Grid item xs={6} sm={6} lg={4} order={{ sm: 2, lg: 1 }}>
-                <Player fighter={fighter1} theme={theme} />
+                <Player fighter={fighter1} theme={theme} setFighter={setFighter1} />
               </Grid>
               <Grid item xs={6} sm={6} lg={4} order={{ sm: 3, lg: 3 }}>
-                <Player fighter={fighter2} theme={theme} />
+                <Player fighter={fighter2} theme={theme} setFighter={setFighter2} />
               </Grid>
             </Grid>
           </Grid>
