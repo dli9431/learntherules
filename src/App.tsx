@@ -6,12 +6,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 // import Grid from '@mui/material/Unstable_Grid2';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import ClearIcon from '@mui/icons-material/Clear';
-import { TextField, InputAdornment, Typography, Stack } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
+import LoginIcon from '@mui/icons-material/Login';
+import { Button, IconButton, TextField, InputAdornment, Typography, Stack } from '@mui/material';
 
 // youtube
 import YouTube from 'react-youtube';
@@ -71,9 +72,9 @@ function App() {
   const [currTime, setCurrTime] = useState<number>(0);
   const [playState, setPlayState] = useState<number>(0);
   const [player, setPlayer] = useState<YouTubePlayer | null>(null);
-  const [fighter1, setFighter1] = useState<Fighter>({ name: 'Player 1', position: 1, points: 0, advantages: 0, penalties: 0 });
-  const [fighter2, setFighter2] = useState<Fighter>({ name: 'Player 2', position: 2, points: 0, advantages: 0, penalties: 0 });
-  const [matchHistory, setMatchHistory] = useState<MatchHistory[]>([]);
+  const [fighter1, setFighter1] = useState<Fighter>({ name: 'Player 1', position: 1, points: 0, advantages: 0, penalties: 0, sub: false, subType: null });
+  const [fighter2, setFighter2] = useState<Fighter>({ name: 'Player 2', position: 2, points: 0, advantages: 0, penalties: 0, sub: false, subType: null });
+  const [matchHistory, setMatchHistory] = useState<MatchHistory | null>(null);
   const [scoreHistory, setScoreHistory] = useState<ScoreHistory[]>([]);
 
   useEffect(() => {
@@ -124,7 +125,41 @@ function App() {
   }, [youtubeId, playState]);
 
   function test() {
-    console.log(scoreHistory);
+    // win by sub
+    if (fighter1.sub || fighter2.sub) {
+      if (fighter1.sub) {
+        setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'sub', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+      } else {
+        setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'sub', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+      }
+      // if (fighter2.sub) {
+
+      // }
+    }
+    else {
+      if (fighter1.points === fighter2.points) {
+        // equal points + penalties/advantages
+        if ((fighter1.advantages - fighter1.penalties) === (fighter2.advantages - fighter2.penalties)) {
+          // implement ref decision
+
+        }
+        // equal points, check advantages+penalties
+        else if ((fighter1.advantages - fighter1.penalties) > (fighter2.advantages - fighter2.penalties)) {
+          setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'adv', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+        }
+        else if ((fighter1.advantages - fighter1.penalties) < (fighter2.advantages - fighter2.penalties)) {
+          setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'adv', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+        }
+      }
+      else {
+        if (fighter1.points > fighter2.points) {
+          setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'pts', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+        } else {
+          setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'pts', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+        }
+      }
+    }
+    console.log(matchHistory)
   }
 
   function playerControl(action: string) {
@@ -244,7 +279,10 @@ function App() {
             xs={12} sm={6} md={6} lg={12}
           >
             <Grid container>
-              <button onClick={() => test()}>test</button>
+
+              <Grid item xs={12}>
+                <IconButton onClick={() => test()}><SaveIcon /></IconButton>
+              </Grid>
               <Grid item xs={12} sm={12} md={12} lg={4} order={{ sm: 1, lg: 2 }} sx={{ textAlign: 'center' }}>
                 <Timer currTime={currTime} />
               </Grid>

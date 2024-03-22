@@ -3,7 +3,9 @@ export interface Fighter {
     position: number,
     points: number,
     advantages: number,
-    penalties: number
+    penalties: number,
+    sub: boolean,
+    subType: string | null
 }
 
 export interface PlayerOptions {
@@ -34,12 +36,14 @@ export interface ScoreHistory {
     scoreType: string;
     time: number;
     fighter: number;
+    subType: string | null;
 }
 
 export interface MatchHistory {
     fighter1: Fighter;
     fighter2: Fighter;
     winner: string;
+    method: string;
     ref: string;
     date: string;
     history: ScoreHistory[];
