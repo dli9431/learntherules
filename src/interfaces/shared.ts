@@ -1,6 +1,9 @@
 export interface Fighter {
     name: string;
-    position: number
+    position: number,
+    points: number,
+    advantages: number,
+    penalties: number
 }
 
 export interface PlayerOptions {

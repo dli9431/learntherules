@@ -1,70 +1,77 @@
-import { Button, Stack, Box, Paper, Typography, Grid } from '@mui/material';
+import { Stack, Box, Paper, Typography, Grid } from '@mui/material';
 import { Fighter } from './interfaces/shared.ts';
 import { Theme } from '@mui/material/styles';
-import Score from './score.tsx';
-import { ScoreDial } from './score.tsx';
+import ScorePopover from './scorePopover.tsx';
 
 export const Player = ({ fighter, theme }: { fighter: Fighter; theme: Theme }) => {
     return (
-        <Box
+
+        <Paper
             sx={{
                 display: 'flex',
-                width: '100%',
-                height: '100%',
                 justifyContent: 'center',
-                alignItems: 'center',
+                bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
+                padding: 1,
             }}
         >
-            <Paper
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    bgcolor: theme.palette.mode === 'dark' ? '#1A2027' : '#f9f2eb',
-                    padding: 1,
-                    width: '100%',
-                    height: '100%'
-                }}
-            >
-                <Stack spacing={0} alignItems="center" /*direction={{ sm: 'column', lg: 'row' }}*/>
-                    <Typography fontSize={{ md: 30, xs: 15 }}>
-                        {fighter.name}
-                    </Typography>
-                    <Grid
-                        direction={{ sm: 'row' }}
-                        container
-                        sx={{ border: '1px solid black' }}
-                    >
-                        <Grid item>
-                            <ScoreDial action="add" position={fighter.position} />
+            <Stack>
+                <Grid container spacing={0} className="scores">
+                    <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <Box sx={{
+                            width: '100%',
+                            height: '100%',
+                            maxWidth: { sm: '100px', lg: '150px' },
+                            maxHeight: { sm: '100px', lg: '150px' },
+                            bgcolor: 'green', color: 'text.primary', textAlign: 'center',
+                            display: 'flex', justifyContent: 'center', alignItems: 'center'
+                        }}>
+                            <Typography variant="h3">
+                                {fighter.points}
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Grid item xs={12} sx={{ height: '50%' }}>
+                            <Box sx={{
+                                maxWidth: { md: '100px', xs: '50px' },
+                                bgcolor: 'yellow', color: 'text.primary', display: 'flex', justifyContent: 'center', alignItems: 'center'
+                            }}>
+                                <Typography variant="h4">
+                                    {fighter.advantages}
+                                </Typography>
+                            </Box>
                         </Grid>
-                        <Grid item>
-                            <ScoreDial action="remove" position={fighter.position} />
+                        <Grid item xs={12} sx={{ height: '50%' }}>
+                            <Box sx={{
+                                maxWidth: { md: '100px', xs: '50px' },
+                                bgcolor: 'red', color: 'text.primary', display: 'flex', justifyContent: 'center', alignItems: 'center'
+                            }}>
+                                <Typography variant="h4">
+                                    {fighter.penalties}
+                                </Typography>
+                            </Box>
                         </Grid>
                     </Grid>
-                    {/* <Grid
-                        direction="row"
-                        container
-                        sx={{ border: '1px solid black' }}
-                    >
-                        <Grid item>
-                            <Score variant="outlined" color="error" value="-p" />
-                        </Grid>
-                        <Grid item>
-                            <Score variant="outlined" color="success" value="-2" />
-                        </Grid>
-                        <Grid item>
-                            <Score variant="outlined" color="success" value="-3" />
-                        </Grid>
-                        <Grid item>
-                            <Score variant="outlined" color="success" value="-4" />
-                        </Grid>
-                        <Grid item>
-                            <Score variant="outlined" color="info" value="-a" />
-                        </Grid>
-                    </Grid> */}
-                </Stack>
-            </Paper>
-        </Box>
+                </Grid>
+                <Typography fontSize={{ md: 30, xs: 15 }} sx={{ textAlign: 'center' }}>
+                    {fighter.name}
+                </Typography>
+                <Grid
+                    direction={{ sm: 'row' }}
+                    container
+                    sx={{
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Grid item>
+                        <ScorePopover action="add" />
+                    </Grid>
+                    <Grid item>
+                        <ScorePopover action="remove" />
+                    </Grid>
+                </Grid>
+            </Stack>
+        </Paper>
     )
 }
 

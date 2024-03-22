@@ -7,7 +7,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -62,7 +61,7 @@ function App() {
   const [input, setInput] = useState<string>('');
   const [youtubeId, setYoutubeId] = useState<string>('UZ3m4ay8Jrk'); // for testing
   const [opts, setOpts] = useState<PlayerOptions>({
-    height: '360', width: '720',
+    height: '390', width: '640', // default youtube api size
     playerVars: {
       mute: 1,
       autoplay: 0,
@@ -72,24 +71,31 @@ function App() {
   const [currTime, setCurrTime] = useState<number>(0);
   const [playState, setPlayState] = useState<number>(0);
   const [player, setPlayer] = useState<any>(null);
-  const [fighter1, setFighter1] = useState<Fighter>({ name: 'Player 1', position: 1 });
-  const [fighter2, setFighter2] = useState<Fighter>({ name: 'Player 2', position: 2 });
+  const [fighter1, setFighter1] = useState<Fighter>({ name: 'Player 1', position: 1, points: 0, advantages: 0, penalties: 0 });
+  const [fighter2, setFighter2] = useState<Fighter>({ name: 'Player 2', position: 2, points: 0, advantages: 0, penalties: 0 });
 
   useEffect(() => {
     // update player size
     function updateSize() {
-      const breakpoints = theme.breakpoints.values;
       let videoSize = { width: 1, height: 1 };
+      const aspectRatio = 39 / 64;
+      const breakpoints = theme.breakpoints.values;
       if (window.innerWidth < breakpoints.sm) {
-        videoSize = { width: 1, height: 0.5 };
+        // full screen
+        videoSize.width = window.innerWidth;
+        videoSize.height = Math.floor((videoSize.width * aspectRatio));
       }
       if (window.innerWidth >= breakpoints.sm && window.innerWidth < breakpoints.lg) {
-        videoSize = { width: .5, height: 1 };
+        // half width + aspect ratio
+        videoSize.width = Math.floor(.5 * window.innerWidth);
+        videoSize.height = Math.floor((videoSize.width * aspectRatio));
       }
       if (window.innerWidth >= breakpoints.lg) {
-        videoSize = { width: 1, height: .5 };
+        // full screen+padding + half height
+        videoSize.width = window.innerWidth;
+        videoSize.height = Math.floor((.5 * window.innerHeight) - 56);
       }
-      setOpts(prev => ({ ...prev, height: Math.floor(videoSize.height * window.innerHeight).toString(), width: (videoSize.width * window.innerWidth).toString() }));
+      setOpts(prev => ({ ...prev, height: videoSize.height.toString(), width: videoSize.width.toString() }));
     }
     updateSize();
     window.addEventListener('resize', updateSize);
@@ -130,8 +136,8 @@ function App() {
     // parse video title
     const names = parseTitle(event.target.videoTitle);
     if (names) {
-      setFighter1({ name: names.firstPerson, position: 1 });
-      setFighter2({ name: names.secondPerson, position: 2 });
+      setFighter1(prev => ({ ...prev, name: names.firstPerson }));
+      setFighter2(prev => ({ ...prev, name: names.secondPerson }));
     }
   };
   const onStateChange = (event: { target: any; }) => {
@@ -177,11 +183,10 @@ function App() {
         </Stack>
       </Paper>
       <Grid
-        spacing={0}
+        className="playerScoreContainer"
         direction={{ xs: 'column', sm: 'row', md: 'row', lg: 'column' }}
         container
         sx={{
-          flexGrow: 1,
           bgcolor: 'background.default',
           color: 'text.primary',
         }}
@@ -192,6 +197,11 @@ function App() {
             item
             xs={12} sm={6} md={6} lg={12}
             className='player'
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
             <YouTube
               // key={opts.width + opts.height} // forces rerender when window size changes
@@ -207,10 +217,8 @@ function App() {
             item
             className='scoreboard'
             xs={12} sm={6} md={6} lg={12}
-            display={{ xs: 'none', sm: 'inline' }}
-            flexGrow={1}
           >
-            <Grid container spacing={0}>
+            <Grid container>
               <Grid item xs={12} sm={12} md={12} lg={4} order={{ sm: 1, lg: 2 }} sx={{ textAlign: 'center' }}>
                 <Timer currTime={currTime} />
               </Grid>

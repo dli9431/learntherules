@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 export function Timer({ currTime }: { currTime: number }) {
   const seconds = currTime;
