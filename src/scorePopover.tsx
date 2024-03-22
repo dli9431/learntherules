@@ -6,7 +6,8 @@ import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-export default function ScorePopover({ action, setFighter, playerControl }: { action: 'add' | 'remove'; setFighter: any; playerControl: any }) {
+export default function ScorePopover({ action, setFighter, playerControl, setScoreHistory }:
+    { action: 'add' | 'remove'; setFighter: any; playerControl: any, setScoreHistory: any; }) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -23,12 +24,15 @@ export default function ScorePopover({ action, setFighter, playerControl }: { ac
         setFighter((prev: any) => {
             switch (type) {
                 case 'pts':
+                    setScoreHistory((prevHist: any) => [...prevHist, { scoreAmount: points, scoreType: 'pts', time: playerControl('duration'), fighter: prev.position }]);
                     return { ...prev, points: prev.points + points };
                     break;
                 case 'adv':
+                    setScoreHistory((prevHist: any) => [...prevHist, { scoreAmount: points, scoreType: 'adv', time: playerControl('duration'), fighter: prev.position }]);
                     return { ...prev, advantages: prev.advantages + points };
                     break;
                 case 'pen':
+                    setScoreHistory((prevHist: any) => [...prevHist, { scoreAmount: points, scoreType: 'pen', time: playerControl('duration'), fighter: prev.position }]);
                     return { ...prev, penalties: prev.penalties + points };
                     break;
                 default:

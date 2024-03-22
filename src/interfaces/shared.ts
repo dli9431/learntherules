@@ -28,3 +28,19 @@ export interface YouTubePlayer {
     getPlayerState(): number; // Player states (unstarted, ended, playing, etc.)
     getDuration(): number;
 }
+
+export interface ScoreHistory {
+    scoreAmount: number;
+    scoreType: string;
+    time: number;
+    fighter: number;
+}
+
+export interface MatchHistory {
+    fighter1: Fighter;
+    fighter2: Fighter;
+    winner: string;
+    ref: string;
+    date: string;
+    history: ScoreHistory[];
+}

@@ -20,7 +20,7 @@ import YouTube from 'react-youtube';
 import client from './../env/secrets.ts';
 import { parseTitle } from './parse.tsx';
 import Timer from './timer.tsx';
-import { Fighter, PlayerOptions, YouTubePlayer } from './interfaces/shared.ts';
+import { ScoreHistory, MatchHistory, Fighter, PlayerOptions, YouTubePlayer } from './interfaces/shared.ts';
 import Player from './player.tsx';
 
 const ColorModeContext = createContext({ toggleColorMode: () => { } });
@@ -73,6 +73,8 @@ function App() {
   const [player, setPlayer] = useState<YouTubePlayer | null>(null);
   const [fighter1, setFighter1] = useState<Fighter>({ name: 'Player 1', position: 1, points: 0, advantages: 0, penalties: 0 });
   const [fighter2, setFighter2] = useState<Fighter>({ name: 'Player 2', position: 2, points: 0, advantages: 0, penalties: 0 });
+  const [matchHistory, setMatchHistory] = useState<MatchHistory[]>([]);
+  const [scoreHistory, setScoreHistory] = useState<ScoreHistory[]>([]);
 
   useEffect(() => {
     // update player size
@@ -121,6 +123,10 @@ function App() {
     };
   }, [youtubeId, playState]);
 
+  function test() {
+    console.log(scoreHistory);
+  }
+
   function playerControl(action: string) {
     switch (action) {
       case 'play':
@@ -131,6 +137,9 @@ function App() {
         break;
       case 'stop':
         player?.stopVideo();
+        break;
+      case 'duration':
+        return player?.getCurrentTime();
         break;
       default:
         break;
@@ -235,14 +244,15 @@ function App() {
             xs={12} sm={6} md={6} lg={12}
           >
             <Grid container>
+              <button onClick={() => test()}>test</button>
               <Grid item xs={12} sm={12} md={12} lg={4} order={{ sm: 1, lg: 2 }} sx={{ textAlign: 'center' }}>
                 <Timer currTime={currTime} />
               </Grid>
               <Grid item xs={6} sm={6} lg={4} order={{ sm: 2, lg: 1 }}>
-                <Player fighter={fighter1} theme={theme} setFighter={setFighter1} playerControl={playerControl} />
+                <Player fighter={fighter1} theme={theme} setFighter={setFighter1} playerControl={playerControl} setScoreHistory={setScoreHistory} />
               </Grid>
               <Grid item xs={6} sm={6} lg={4} order={{ sm: 3, lg: 3 }}>
-                <Player fighter={fighter2} theme={theme} setFighter={setFighter2} playerControl={playerControl} />
+                <Player fighter={fighter2} theme={theme} setFighter={setFighter2} playerControl={playerControl} setScoreHistory={setScoreHistory} />
               </Grid>
             </Grid>
           </Grid>

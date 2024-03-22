@@ -3,7 +3,8 @@ import { Fighter } from './interfaces/shared.ts';
 import { Theme } from '@mui/material/styles';
 import ScorePopover from './scorePopover.tsx';
 
-export const Player = ({ fighter, theme, setFighter, playerControl }: { fighter: Fighter; theme: Theme; setFighter: any; playerControl: any; }) => {
+export const Player = ({ fighter, theme, setFighter, playerControl, setScoreHistory }:
+    { fighter: Fighter; theme: Theme; setFighter: any; playerControl: any; setScoreHistory: any; }) => {
     return (
 
         <Paper
@@ -64,10 +65,10 @@ export const Player = ({ fighter, theme, setFighter, playerControl }: { fighter:
                     }}
                 >
                     <Grid item>
-                        <ScorePopover action="add" setFighter={setFighter} playerControl={playerControl} />
+                        <ScorePopover action="add" setFighter={setFighter} playerControl={playerControl} setScoreHistory={setScoreHistory} />
                     </Grid>
                     <Grid item>
-                        <ScorePopover action="remove" setFighter={setFighter} playerControl={playerControl} />
+                        <ScorePopover action="remove" setFighter={setFighter} playerControl={playerControl} setScoreHistory={setScoreHistory} />
                     </Grid>
                 </Grid>
             </Stack>
