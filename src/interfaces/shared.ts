@@ -48,3 +48,10 @@ export interface MatchHistory {
     date: string;
     history: ScoreHistory[];
 }
+
+export function convertSecondsToTime(seconds: number): string {
+    seconds = Math.round(seconds);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds}`;
+}

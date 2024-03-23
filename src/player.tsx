@@ -6,7 +6,6 @@ import ScorePopover from './scorePopover.tsx';
 export const Player = ({ fighter, theme, setFighter, playerControl, setScoreHistory }:
     { fighter: Fighter; theme: Theme; setFighter: any; playerControl: any; setScoreHistory: any; }) => {
     return (
-
         <Paper
             sx={{
                 display: 'flex',

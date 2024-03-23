@@ -24,6 +24,7 @@ import Timer from './timer.tsx';
 import { ScoreHistory, MatchHistory, Fighter, PlayerOptions, YouTubePlayer } from './interfaces/shared.ts';
 import Player from './player.tsx';
 import RefDecPopover from './refDecPopover.tsx';
+import Match from './match.tsx';
 
 const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
@@ -320,8 +321,8 @@ function App() {
               <Grid item xs={6} sm={6} lg={4} order={{ sm: 3, lg: 3 }}>
                 <Player fighter={fighter2} theme={theme} setFighter={setFighter2} playerControl={playerControl} setScoreHistory={setScoreHistory} />
               </Grid>
-              <Grid item xs={12} sm={12} lg={12} order={{ sm: 3, lg: 3 }}>
-                {/* <Match history={matchHistory} /> */}
+              <Grid item xs={12} sm={12} md={12} lg={12} sx={{ flexGrow: 1, flexBasis: 0 }} order={4}>
+                <Match theme={theme} fighter1={fighter1} fighter2={fighter2} history={scoreHistory} />
               </Grid>
             </Grid>
           </Grid>
