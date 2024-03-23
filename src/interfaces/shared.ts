@@ -8,6 +8,32 @@ export interface Fighter {
     subType: string | null
 }
 
+export interface ScoreHistory {
+    scoreAmount: number;
+    scoreType: string;
+    time: number;
+    fighter: number;
+    subType: string | null;
+}
+
+export interface MatchHistory {
+    fighter1: Fighter;
+    fighter2: Fighter;
+    winner: string;
+    method: string;
+    ref: string;
+    date: string;
+    history: ScoreHistory[];
+}
+
+export interface VideoInfo {
+    url: string;
+}
+
+export interface User {
+    username: string;
+}
+
 export interface PlayerOptions {
     height: string;
     width: string;
@@ -30,24 +56,6 @@ export interface YouTubePlayer {
     getPlayerState(): number; // Player states (unstarted, ended, playing, etc.)
     getDuration(): number;
     videoTitle: string;
-}
-
-export interface ScoreHistory {
-    scoreAmount: number;
-    scoreType: string;
-    time: number;
-    fighter: number;
-    subType: string | null;
-}
-
-export interface MatchHistory {
-    fighter1: Fighter;
-    fighter2: Fighter;
-    winner: string;
-    method: string;
-    ref: string;
-    date: string;
-    history: ScoreHistory[];
 }
 
 export function convertSecondsToTime(seconds: number): string {

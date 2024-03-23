@@ -318,13 +318,13 @@ function App() {
             xs={12} sm={6} md={6} lg={12}
           >
             <Grid container>
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <IconButton onClick={handleReset}>
                   <RefreshIcon />
                 </IconButton>
-                <IconButton onClick={handleClick}>
+                {/* <IconButton onClick={handleClick}>
                   <SaveIcon />
-                </IconButton>
+                </IconButton> */}
                 <Popover
                   id={id}
                   open={open}
@@ -347,7 +347,7 @@ function App() {
               <Grid item xs={6} sm={6} lg={4} order={{ sm: 3, lg: 3 }}>
                 <Player fighter={fighter2} theme={theme} setFighter={setFighter2} playerControl={playerControl} setScoreHistory={setScoreHistory} />
               </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={12} sx={{ flexGrow: 1, flexBasis: 0 }} order={4}>
+              <Grid pt={1} item xs={12} sm={12} md={12} lg={12} sx={{ flexGrow: 1, flexBasis: 0 }} order={4}>
                 <Match theme={theme} fighter1={fighter1} fighter2={fighter2} history={scoreHistory} />
               </Grid>
             </Grid>
