@@ -63,7 +63,8 @@ function App() {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   const [input, setInput] = useState<string>('');
-  const [youtubeId, setYoutubeId] = useState<string>('UZ3m4ay8Jrk'); // for testing
+  // const [youtubeId, setYoutubeId] = useState<string>('UZ3m4ay8Jrk'); // for testing
+  const [youtubeId, setYoutubeId] = useState<string>('');
   const [opts, setOpts] = useState<PlayerOptions>({
     height: '390', width: '640', // default youtube api size
     playerVars: {
