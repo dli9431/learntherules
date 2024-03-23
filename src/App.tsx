@@ -12,7 +12,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import ClearIcon from '@mui/icons-material/Clear';
 import SaveIcon from '@mui/icons-material/Save';
 import LoginIcon from '@mui/icons-material/Login';
-import { Button, IconButton, TextField, InputAdornment, Typography, Stack } from '@mui/material';
+import { Popover, Button, IconButton, TextField, InputAdornment, Typography, Stack } from '@mui/material';
 
 // youtube
 import YouTube from 'react-youtube';
@@ -23,6 +23,7 @@ import { parseTitle } from './parse.tsx';
 import Timer from './timer.tsx';
 import { ScoreHistory, MatchHistory, Fighter, PlayerOptions, YouTubePlayer } from './interfaces/shared.ts';
 import Player from './player.tsx';
+import RefDecPopover from './refDecPopover.tsx';
 
 const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
@@ -77,6 +78,58 @@ function App() {
   const [matchHistory, setMatchHistory] = useState<MatchHistory | null>(null);
   const [scoreHistory, setScoreHistory] = useState<ScoreHistory[]>([]);
 
+  // ref decision popover
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // stop video
+    playerControl('stop');
+
+    // win by sub
+    if (fighter1.sub || fighter2.sub) {
+      if (fighter1.sub) {
+        setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'sub', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+      } else {
+        setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'sub', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+      }
+    }
+    else {
+      if (fighter1.points === fighter2.points) {
+        // equal points + penalties/advantages
+        if ((fighter1.advantages - fighter1.penalties) === (fighter2.advantages - fighter2.penalties)) {
+          // implement ref decision
+          setAnchorEl(event.currentTarget);
+        }
+        // equal points, check advantages+penalties
+        else if ((fighter1.advantages - fighter1.penalties) > (fighter2.advantages - fighter2.penalties)) {
+          setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'adv', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+        }
+        else if ((fighter1.advantages - fighter1.penalties) < (fighter2.advantages - fighter2.penalties)) {
+          setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'adv', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+        }
+      }
+      else {
+        if (fighter1.points > fighter2.points) {
+          setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'pts', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+        } else {
+          setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'pts', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+        }
+      }
+    }
+    console.log(matchHistory)
+  };
+  const setWinner = (winner: number, reason: string) => {
+    if (winner === 1) {
+      setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'ref: ' + reason, ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+    } else {
+      setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'ref: ' + reason, ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+    }
+  }
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'decide-ref-decision-popover' : undefined;
+
   useEffect(() => {
     // update player size
     function updateSize() {
@@ -123,44 +176,6 @@ function App() {
       }
     };
   }, [youtubeId, playState]);
-
-  function test() {
-    // win by sub
-    if (fighter1.sub || fighter2.sub) {
-      if (fighter1.sub) {
-        setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'sub', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-      } else {
-        setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'sub', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-      }
-      // if (fighter2.sub) {
-
-      // }
-    }
-    else {
-      if (fighter1.points === fighter2.points) {
-        // equal points + penalties/advantages
-        if ((fighter1.advantages - fighter1.penalties) === (fighter2.advantages - fighter2.penalties)) {
-          // implement ref decision
-
-        }
-        // equal points, check advantages+penalties
-        else if ((fighter1.advantages - fighter1.penalties) > (fighter2.advantages - fighter2.penalties)) {
-          setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'adv', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-        }
-        else if ((fighter1.advantages - fighter1.penalties) < (fighter2.advantages - fighter2.penalties)) {
-          setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'adv', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-        }
-      }
-      else {
-        if (fighter1.points > fighter2.points) {
-          setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'pts', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-        } else {
-          setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'pts', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-        }
-      }
-    }
-    console.log(matchHistory)
-  }
 
   function playerControl(action: string) {
     switch (action) {
@@ -279,9 +294,22 @@ function App() {
             xs={12} sm={6} md={6} lg={12}
           >
             <Grid container>
-
               <Grid item xs={12}>
-                <IconButton onClick={() => test()}><SaveIcon /></IconButton>
+                <IconButton onClick={handleClick}>
+                  <SaveIcon />
+                </IconButton>
+                <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                >
+                  <RefDecPopover fighter1={fighter1} fighter2={fighter2} setWinner={setWinner} handleClose={handleClose} />
+                </Popover>
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={4} order={{ sm: 1, lg: 2 }} sx={{ textAlign: 'center' }}>
                 <Timer currTime={currTime} />
@@ -291,6 +319,9 @@ function App() {
               </Grid>
               <Grid item xs={6} sm={6} lg={4} order={{ sm: 3, lg: 3 }}>
                 <Player fighter={fighter2} theme={theme} setFighter={setFighter2} playerControl={playerControl} setScoreHistory={setScoreHistory} />
+              </Grid>
+              <Grid item xs={12} sm={12} lg={12} order={{ sm: 3, lg: 3 }}>
+                {/* <Match history={matchHistory} /> */}
               </Grid>
             </Grid>
           </Grid>

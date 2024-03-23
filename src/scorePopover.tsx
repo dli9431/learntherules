@@ -9,7 +9,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 export default function ScorePopover({ action, setFighter, playerControl, setScoreHistory }:
     { action: 'add' | 'remove'; setFighter: any; playerControl: any, setScoreHistory: any; }) {
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-    const [sub, setSub] = useState<string | null>(null)
+    const [sub, setSub] = useState<string>('')
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         playerControl('pause');
         setAnchorEl(event.currentTarget);
