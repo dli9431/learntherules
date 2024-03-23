@@ -22,7 +22,7 @@ export const Player = ({ fighter, theme, setFighter, playerControl, setScoreHist
                             height: '100%',
                             maxWidth: { sm: '100px', lg: '150px' },
                             maxHeight: { sm: '100px', lg: '150px' },
-                            bgcolor: 'green', color: 'text.primary', textAlign: 'center',
+                            bgcolor: 'green', color: '#000', textAlign: 'center',
                             display: 'flex', justifyContent: 'center', alignItems: 'center'
                         }}>
                             <Typography variant="h3">
@@ -34,7 +34,7 @@ export const Player = ({ fighter, theme, setFighter, playerControl, setScoreHist
                         <Grid item xs={12} sx={{ height: '50%' }}>
                             <Box sx={{
                                 maxWidth: { md: '100px', xs: '50px' },
-                                bgcolor: 'yellow', color: 'text.primary', display: 'flex', justifyContent: 'center', alignItems: 'center'
+                                bgcolor: 'yellow', color: '#000', display: 'flex', justifyContent: 'center', alignItems: 'center'
                             }}>
                                 <Typography variant="h4">
                                     {fighter.advantages}
@@ -44,7 +44,7 @@ export const Player = ({ fighter, theme, setFighter, playerControl, setScoreHist
                         <Grid item xs={12} sx={{ height: '50%' }}>
                             <Box sx={{
                                 maxWidth: { md: '100px', xs: '50px' },
-                                bgcolor: 'red', color: 'text.primary', display: 'flex', justifyContent: 'center', alignItems: 'center'
+                                bgcolor: 'red', color: '#000', display: 'flex', justifyContent: 'center', alignItems: 'center'
                             }}>
                                 <Typography variant="h4">
                                     {fighter.penalties}
