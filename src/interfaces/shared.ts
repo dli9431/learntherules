@@ -29,6 +29,7 @@ export interface YouTubePlayer {
     getCurrentTime(): number;
     getPlayerState(): number; // Player states (unstarted, ended, playing, etc.)
     getDuration(): number;
+    videoTitle: string;
 }
 
 export interface ScoreHistory {

@@ -11,6 +11,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import ClearIcon from '@mui/icons-material/Clear';
 import SaveIcon from '@mui/icons-material/Save';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import LoginIcon from '@mui/icons-material/Login';
 import { Popover, IconButton, TextField, InputAdornment, Typography, Stack } from '@mui/material';
 
@@ -78,9 +79,24 @@ function App() {
   const [fighter2, setFighter2] = useState<Fighter>({ name: 'Player 2', position: 2, points: 0, advantages: 0, penalties: 0, sub: false, subType: null });
   const [matchHistory, setMatchHistory] = useState<MatchHistory | null>(null);
   const [scoreHistory, setScoreHistory] = useState<ScoreHistory[]>([]);
-
   // ref decision popover
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const handleReset = () => {
+    // stop video
+    playerControl('seekTo', 0)
+    playerControl('stop');
+    // reset state
+    if (youtubeId && player) {
+      // parse video title
+      const names = parseTitle(player.videoTitle.toString());
+      if (names) {
+        setFighter1({ name: names.firstPerson, position: 1, points: 0, advantages: 0, penalties: 0, sub: false, subType: null });
+        setFighter2({ name: names.secondPerson, position: 2, points: 0, advantages: 0, penalties: 0, sub: false, subType: null });
+      }
+    }
+    setScoreHistory([]);
+    setMatchHistory(null);
+  }
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     // stop video
     playerControl('stop');
@@ -178,7 +194,7 @@ function App() {
     };
   }, [youtubeId, playState]);
 
-  function playerControl(action: string) {
+  function playerControl(action: string, seek?: number) {
     switch (action) {
       case 'play':
         player?.playVideo();
@@ -191,6 +207,13 @@ function App() {
         break;
       case 'duration':
         return player?.getCurrentTime();
+        break;
+      case 'seekTo':
+        if (seek !== undefined && seek > 0) {
+          player?.seekTo(seek);
+        } else {
+          player?.seekTo(0);
+        }
         break;
       default:
         break;
@@ -296,6 +319,9 @@ function App() {
           >
             <Grid container>
               <Grid item xs={12}>
+                <IconButton onClick={handleReset}>
+                  <RefreshIcon />
+                </IconButton>
                 <IconButton onClick={handleClick}>
                   <SaveIcon />
                 </IconButton>
