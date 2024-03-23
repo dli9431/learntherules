@@ -10,16 +10,16 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import ClearIcon from '@mui/icons-material/Clear';
-import SaveIcon from '@mui/icons-material/Save';
+// import SaveIcon from '@mui/icons-material/Save';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import LoginIcon from '@mui/icons-material/Login';
+// import LoginIcon from '@mui/icons-material/Login';
 import { Popover, IconButton, TextField, InputAdornment, Typography, Stack } from '@mui/material';
 
 // youtube
 import YouTube from 'react-youtube';
 
 // app imports
-import client from './../env/secrets.ts';
+// import client from './../env/secrets.ts';
 import { parseTitle } from './parse.tsx';
 import Timer from './timer.tsx';
 import { ScoreHistory, MatchHistory, Fighter, PlayerOptions, YouTubePlayer } from './interfaces/shared.ts';
@@ -97,43 +97,43 @@ function App() {
     setScoreHistory([]);
     setMatchHistory(null);
   }
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // stop video
-    playerControl('stop');
+  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   // stop video
+  //   playerControl('stop');
 
-    // win by sub
-    if (fighter1.sub || fighter2.sub) {
-      if (fighter1.sub) {
-        setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'sub', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-      } else {
-        setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'sub', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-      }
-    }
-    else {
-      if (fighter1.points === fighter2.points) {
-        // equal points + penalties/advantages
-        if ((fighter1.advantages - fighter1.penalties) === (fighter2.advantages - fighter2.penalties)) {
-          // implement ref decision
-          setAnchorEl(event.currentTarget);
-        }
-        // equal points, check advantages+penalties
-        else if ((fighter1.advantages - fighter1.penalties) > (fighter2.advantages - fighter2.penalties)) {
-          setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'adv', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-        }
-        else if ((fighter1.advantages - fighter1.penalties) < (fighter2.advantages - fighter2.penalties)) {
-          setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'adv', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-        }
-      }
-      else {
-        if (fighter1.points > fighter2.points) {
-          setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'pts', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-        } else {
-          setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'pts', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
-        }
-      }
-    }
-    console.log(matchHistory)
-  };
+  //   // win by sub
+  //   if (fighter1.sub || fighter2.sub) {
+  //     if (fighter1.sub) {
+  //       setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'sub', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+  //     } else {
+  //       setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'sub', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+  //     }
+  //   }
+  //   else {
+  //     if (fighter1.points === fighter2.points) {
+  //       // equal points + penalties/advantages
+  //       if ((fighter1.advantages - fighter1.penalties) === (fighter2.advantages - fighter2.penalties)) {
+  //         // implement ref decision
+  //         setAnchorEl(event.currentTarget);
+  //       }
+  //       // equal points, check advantages+penalties
+  //       else if ((fighter1.advantages - fighter1.penalties) > (fighter2.advantages - fighter2.penalties)) {
+  //         setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'adv', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+  //       }
+  //       else if ((fighter1.advantages - fighter1.penalties) < (fighter2.advantages - fighter2.penalties)) {
+  //         setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'adv', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+  //       }
+  //     }
+  //     else {
+  //       if (fighter1.points > fighter2.points) {
+  //         setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'pts', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+  //       } else {
+  //         setMatchHistory({ fighter1, fighter2, winner: 'fighter2', method: 'pts', ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
+  //       }
+  //     }
+  //   }
+  //   console.log(matchHistory)
+  // };
   const setWinner = (winner: number, reason: string) => {
     if (winner === 1) {
       setMatchHistory({ fighter1, fighter2, winner: 'fighter1', method: 'ref: ' + reason, ref: 'username', date: new Date().toLocaleDateString(), history: scoreHistory })
