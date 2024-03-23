@@ -224,9 +224,10 @@ function App() {
   // extract youtube id from link
   function youtubeLink(e: React.ChangeEvent<HTMLInputElement>) {
     let url = e.target.value;
-    let id = url.split('v=')[1];
-    if (id) {
-      setYoutubeId(id);
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be|youtube\.com)\/(?:watch\?v=)?([^&=?\/]*)/i;
+    const match = url.match(regex);
+    if (match) {
+      setYoutubeId(match[1]);
     }
   }
   const onReady = (event: { target: any; }) => {
